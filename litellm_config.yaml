@@ -1,0 +1,7 @@
+# This setting tells LiteLLM to scan the specified directory for all models.
+model_dir: "/models"
+
+# These are the general settings for the LiteLLM server.
+server_settings:
+  host: 0.0.0.0
+  port: 4000
