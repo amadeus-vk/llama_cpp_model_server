@@ -1,8 +1,8 @@
 #!/bin/sh
-version='0.5'
+version='0.6'
 echo "🚀 ($version): Starting LiteLLM server ..."
-echo "==================================="
-echo "       VERSION $(litellm --version)" 
+echo "============ VERSION =============="
+echo "       $(litellm --version)" 
 echo "==================================="
 
 echo "Serving all models found in the /models directory."
