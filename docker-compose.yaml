@@ -12,7 +12,7 @@ services:
     container_name: nollama
     restart: unless-stopped
     volumes:
-      - /media/data/docker/volumes/ollama/_data:/models:ro
+      - /media/data/docker/volumes/ollama/_data/models:/models:ro
     ports:
       - "4000:4000"
     devices:
