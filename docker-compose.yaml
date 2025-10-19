@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.9'
 
 services:
  
@@ -12,7 +12,7 @@ services:
     container_name: nollama
     restart: unless-stopped
     volumes:
-      - /media/data/docker/volumes/ollama/_data/models:/models:ro
+      - /media/data/gguf_models:/models:ro
     ports:
       - "4000:4000"
     devices:
