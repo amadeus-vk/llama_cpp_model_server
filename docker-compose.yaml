@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+ 
+  llamacpp-server:
+    # This service will be built using 'llamacpp.Dockerfile'
+    build:
+      context: .
+      dockerfile: llamacpp.Dockerfile
+    # The 'image' tag gives the locally built image a name
+    image: llama-cpp-model-server
+    container_name: nollama
+    restart: unless-stopped
+    volumes:
+      - /media/data/docker/volumes/ollama/_data:/models:ro
+    ports:
+      - "4000:4000"
+    devices:
+      - /dev/dri:/dev/dri
+    networks:
+      - agent_network
+      
+  # crewai-agent-debug:
+  #   image: nodered-assistant-crewai # Matches IMAGE_NAME
+  #   container_name: nodered-assistant-debug
+  #   env_file:
+  #     - stack.env
+  #   command: ["python", "debug.py"]
+  #   volumes:
+  #     - /root/builder-docs/docs:/app/docs:ro   # Project documentation
+  #     - /root/builder-docs/tasks:/app/tasks:ro # Specific flow tasks
+  #     - ./lock:/app/lock
+    
+  #   networks:
+  #     - agent_network
+   
+networks:
+  agent_network:
+    external: true
