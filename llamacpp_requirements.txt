@@ -1,2 +1,2 @@
-litellm
+litellm>=1.35.0
 llama-cpp-python
