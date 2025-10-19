@@ -1,4 +1,4 @@
-version='0.1'
+version='0.2'
 import os
 import re
 import zlib
@@ -53,15 +53,18 @@ def update_file_versions():
                 
                 for i, line in enumerate(lines[:3]): # Check only first 3 lines
                     # match = re.search(r'(version=)(\d+)', line)
-                    match = re.search(r'(^version=)["\']([\d.]+)(["\'])', line)
+                    match = re.search(r'^#?\ ?(version[=:]\ ?)(["\'\ ])([\d.]+)(["\'])', line)
                     if match:
                         prefix = match.group(1)
-                        if not '.' in match.group(2):
-                            current_version = int(match.group(2))
+                        enc1 = match.group(2)
+                        versionstr = match.group(3)
+                        enc2 = match.group(4)
+                        if not '.' in versionstr:
+                            current_version = int(versionstr)
                             new_version = current_version + 1
                         else:
-                            current_version = match.group(2)
-                            parts = match.group(2).split('.')
+                            current_version = versionstr
+                            parts = versionstr.split('.')
                             if int(parts[-1]) < 10:
                                 parts[-1] = str(int(parts[-1]) + 1)
                             else:
@@ -71,7 +74,7 @@ def update_file_versions():
                             new_version = '.'.join(parts)
                         
                         # Replace the old version number in the specific line
-                        lines[i] = re.sub(r'(^version=)["\'][\d.]+["\']', f"{prefix}'{new_version}'", line)
+                        lines[i] = re.sub(r'(version[=:]\ ?)["\'][\d.]+["\']', f"{prefix}{enc1}{new_version}{enc2}", line)
                         
                         # Rewrite the entire file with the updated content
                         with open(filename, 'w', encoding='utf-8', newline='\n') as f_write:
