@@ -15,8 +15,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Set up the working directory and install the Vulkan SDK
 WORKDIR /app
-RUN wget https://sdk.lunarg.com/sdk/download/latest/linux/vulkan-sdk.tar.gz
-RUN tar -xzf vulkan-sdk.tar.gz
+RUN wget https://sdk.lunarg.com/sdk/download/latest/linux/vulkan-sdk.tar.gz && \
+    tar -xzf vulkan-sdk.tar.gz && \
+    rm vulkan-sdk.tar.gz
 
 # --- Compile llama-cpp-python ---
 # First, install the Python libraries we need (litellm)
