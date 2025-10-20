@@ -1,11 +1,14 @@
-# version='0.7'
+# version='0.8'
 # Use a more complete base image that includes more system libraries
 FROM python:3.11-bookworm
 
 # Prevents prompts from apt during installation
 ENV DEBIAN_FRONTEND=noninteractive
 
+# Force apt-get to use IPv4 to bypass potential IPv6 network issues
+RUN echo 'Acquire::ForceIPv4 "true";' > /etc/apt/apt.conf.d/99force-ipv4
 # A slightly more robust command for installing packages
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     cmake \
