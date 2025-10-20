@@ -1,7 +1,6 @@
-# version='0.9'
+# version='0.10'
 # Use the official pre-built image with Vulkan support as our base
-FROM ghcr.io/abetlen/llama-cpp-python:v0.2.73-vulkan
-
+FROM ghcr.io/abetlen/llama-cpp-python:v0.2.62-vulkan
 # Set the working directory
 WORKDIR /app
 
