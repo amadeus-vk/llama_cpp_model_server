@@ -1,7 +1,7 @@
 {
   "llamacpp_start_server.sh": 3248899586,
   "llamacpp_requirements.txt": 461039947,
-  "llamacpp.Dockerfile": 2707621838,
+  "llamacpp.Dockerfile": 581706978,
   "docker-compose.yaml": 2062153522,
   "litellm_config.yaml": 1461348493
 }
