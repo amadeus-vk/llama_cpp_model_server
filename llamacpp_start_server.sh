@@ -1,10 +1,9 @@
 #!/bin/sh
-version='1.3'
+version='1.4'
 echo "🚀 ($version): Starting LiteLLM server ..."
 echo "============ VERSION =============="
 echo "       $(litellm --version)" 
 echo "==================================="
-
 echo "Serving all models found in the /models directory."
 
 # Start LiteLLM proxy, binding to all interfaces on port 4000

@@ -1,8 +1,8 @@
-# version: '1.4'
+# version: '1.5'
 model_list:
   - model_name: qwen2-7b-instruct
     litellm_params:
-      model: litellm_proxy/llama_cpp/qwen2-7b-instruct-q4_k_m.gguf
+      model: llama_cpp/qwen2-7b-instruct-q4_k_m.gguf
       n_gpu_layers: -1
 
 #   - model_name: Huihui-gpt-oss-20b
