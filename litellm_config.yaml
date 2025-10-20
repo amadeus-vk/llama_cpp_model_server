@@ -1,12 +1,12 @@
-# version: '1.1'
+# version: '1.2'
 # litellm_config.yaml
 # Scan the directory for all .gguf models
-model_dir: "/models"
+# model_dir: "/models"
 
 # Apply these default parameters to EVERY model found in the directory
 # default_litellam_params:
 #   n_gpu_layers: -1
-# model_list:
+model_list:
 #   - model_name: Huihui-gpt-oss-20b
 #     litellm_params:
 #       model: llama_cpp/Huihui-gpt-oss-20b-BF16-abliterated-v2-Q3_K_M.gguf
@@ -23,10 +23,10 @@ model_dir: "/models"
 #       model: llama_cpp/qwen2-7b-instruct-q4_k_m.gguf
 #       n_gpu_layers: -1
 
-#   - model_name: zai-org-GLM-4.6
-#     litellm_params:
-#       model: llama_cpp/zai-org_GLM-4.6-imatrix.gguf
-#       n_gpu_layers: -1
+  - model_name: zai-org-GLM-4.6
+    litellm_params:
+      model: llama_cpp/zai-org_GLM-4.6-imatrix.gguf
+      n_gpu_layers: -1
 
 server_settings:
   host: 0.0.0.0
