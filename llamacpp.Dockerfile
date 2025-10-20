@@ -1,5 +1,5 @@
 # Start from a clean Debian base image
-# version="1.8"
+# version="1.9"
 FROM debian:bookworm
 
 # Set DEBIAN_FRONTEND to noninteractive to avoid prompts
@@ -20,33 +20,26 @@ RUN wget https://sdk.lunarg.com/sdk/download/1.3.283.0/linux/vulkan-sdk-1.3.283.
     tar -xJf vulkan-sdk.tar.gz && \
     rm vulkan-sdk.tar.gz
 
-# --- Compile llama-cpp-python ---
-# First, install the Python libraries we need (litellm)
-# RUN pip3 install --no-cache-dir --upgrade pip
-
+# --- Install Python Libraries ---
+# Copy the requirements file
 COPY llamacpp_requirements.txt .
-RUN pip3 install --no-cache-dir --break-system-packages -r llamacpp_requirements.txt
 
-# Now, compile llama-cpp-python with the Vulkan flags.
-# All the path logic is handled safely inside this RUN command.
+# Install the pinned libraries from requirements.txt,
+# ensuring the Vulkan build flags are set for llama-cpp-python
 RUN VULKAN_SDK_PATH=$(find /app -name "vulkansdk*" -type d) && \
     CMAKE_ARGS="-DLLAMA_VULKAN=on -DVulkan_INCLUDE_DIRS=$VULKAN_SDK_PATH/include -DVulkan_LIBRARIES=$VULKAN_SDK_PATH/lib/libvulkan.so" \
     pip3 install \
         --no-cache-dir \
-        --force-reinstall \
-        --upgrade \ 
         --break-system-packages \
-        llama-cpp-python
+        -r llamacpp_requirements.txt
 
 # --- Set Final Environment for the Running Container ---
-# This sets the necessary paths for the application to find the Vulkan libraries at runtime.
 ENV VULKAN_SDK_PATH /app/vulkansdk*
 ENV PATH $VULKAN_SDK_PATH/bin:$PATH
 ENV LD_LIBRARY_PATH $VULKAN_SDK_PATH/lib:$LD_LIBRARY_PATH
 ENV VK_LAYER_PATH $VULKAN_SDK_PATH/etc/vulkan/explicit_layer.d
 
 # --- Final Setup ---
-# Copy our application files
 COPY litellm_config.yaml .
 COPY llamacpp_start_server.sh .
 RUN chmod +x llamacpp_start_server.sh
