@@ -1,5 +1,5 @@
 #!/bin/sh
-version='0.7'
+version='0.9'
 echo "🚀 ($version): Starting LiteLLM server ..."
 echo "============ VERSION =============="
 echo "       $(litellm --version)" 
