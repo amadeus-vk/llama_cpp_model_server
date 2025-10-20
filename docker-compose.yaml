@@ -1,4 +1,4 @@
-version: '3.10'
+version: '4.0'
 
 services:
  
@@ -15,8 +15,8 @@ services:
       - /media/data/gguf-models:/models:ro
     ports:
       - "4000:4000"
-    devices:
-      - /dev/dri:/dev/dri
+    # devices:
+    #   - /dev/dri:/dev/dri
     networks:
       - agent_network
    

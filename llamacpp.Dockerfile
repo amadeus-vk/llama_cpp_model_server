@@ -1,6 +1,6 @@
 # Use a lean Python base image
 FROM python:3.11-slim
-# version='0.4'
+# version='0.5'
 # Install build tools and Vulkan loaders required for compilation
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
@@ -20,8 +20,8 @@ COPY llamacpp_requirements.txt .
 COPY litellm_config.yaml .
 
 # CRITICAL: Set environment variables to force a Vulkan build for llama-cpp-python
-ENV CMAKE_ARGS="-DLLAMA_VULKAN=on"
-ENV FORCE_CMAKE=1
+# ENV CMAKE_ARGS="-DLLAMA_VULKAN=on"
+# ENV FORCE_CMAKE=1
 
 # Install the python packages, forcing a build from source
 RUN pip install --no-cache-dir -r llamacpp_requirements.txt
