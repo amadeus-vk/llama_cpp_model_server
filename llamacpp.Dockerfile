@@ -1,5 +1,5 @@
 # Start from a clean Debian base image
-# version="1.4"
+# version="1.5"
 FROM debian:bookworm
 
 # Set DEBIAN_FRONTEND to noninteractive to avoid prompts
@@ -22,8 +22,10 @@ RUN wget https://sdk.lunarg.com/sdk/download/1.3.283.0/linux/vulkan-sdk-1.3.283.
 
 # --- Compile llama-cpp-python ---
 # First, install the Python libraries we need (litellm)
+RUN pip3 install --no-cache-dir --upgrade pip
+
 COPY llamacpp_requirements.txt .
-RUN pip3 install -r llamacpp_requirements.txt --upgrade pip
+RUN pip3 install -r llamacpp_requirements.txt
 
 # Now, compile llama-cpp-python with the Vulkan flags.
 # All the path logic is handled safely inside this RUN command.
