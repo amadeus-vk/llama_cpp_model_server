@@ -1,7 +1,7 @@
-# version: '0.9'
+# version: '0.10'
 # This setting tells LiteLLM to scan the specified directory for all models.
 # model_dir: "/models"
-set_verbose: True
+# set_verbose: True
 model_list:
 #   - model_name: Huihui-gpt-oss-20b
 #     litellm_params:
