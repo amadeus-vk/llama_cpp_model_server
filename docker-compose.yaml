@@ -1,4 +1,4 @@
-version: '4.2'
+version: '4.3'
 
 services:
  
@@ -7,7 +7,6 @@ services:
     build:
       context: .
       dockerfile: llamacpp.Dockerfile
-      network: host
 
     # The 'image' tag gives the locally built image a name
     image: llama-cpp-model-server
