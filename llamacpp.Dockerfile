@@ -1,13 +1,17 @@
-# version='0.6'
+# version='0.7'
 # Use a more complete base image that includes more system libraries
 FROM python:3.11-bookworm
 
-# Install build tools
+# Prevents prompts from apt during installation
+ENV DEBIAN_FRONTEND=noninteractive
+
+# A slightly more robust command for installing packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     cmake \
     pkg-config \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/**
 
 WORKDIR /app
 
