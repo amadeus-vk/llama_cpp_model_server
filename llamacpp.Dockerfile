@@ -1,31 +1,18 @@
-# version='0.8'
-# Use a more complete base image that includes more system libraries
-FROM python:3.11-bookworm
+# version='0.9'
+# Use the official pre-built image with Vulkan support as our base
+FROM ghcr.io/abetlen/llama-cpp-python:v0.2.73-vulkan
 
-# Prevents prompts from apt during installation
-ENV DEBIAN_FRONTEND=noninteractive
-
-# Force apt-get to use IPv4 to bypass potential IPv6 network issues
-RUN echo 'Acquire::ForceIPv4 "true";' > /etc/apt/apt.conf.d/99force-ipv4
-# A slightly more robust command for installing packages
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    cmake \
-    pkg-config \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/**
-
+# Set the working directory
 WORKDIR /app
 
-# Copy and install requirements
-COPY llamacpp_requirements.txt .
-RUN pip install --no-cache-dir -r llamacpp_requirements.txt
+# Install litellm and its proxy dependencies
+RUN pip install "litellm[proxy]"
 
-# Copy the rest of the application files
+# Copy our configuration and startup script
 COPY litellm_config.yaml .
 COPY llamacpp_start_server.sh .
 RUN chmod +x llamacpp_start_server.sh
 
+# Expose the port and set the startup command
 EXPOSE 4000
 CMD ["./llamacpp_start_server.sh"]
