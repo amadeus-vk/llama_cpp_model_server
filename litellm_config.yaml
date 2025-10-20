@@ -1,25 +1,28 @@
-# version: '0.10'
-# This setting tells LiteLLM to scan the specified directory for all models.
-# model_dir: "/models"
-# set_verbose: True
+# version: '1.0'
+# litellm_config.yaml
+
 model_list:
-#   - model_name: Huihui-gpt-oss-20b
-#     litellm_params:
-#       model: llama_cpp/Huihui-gpt-oss-20b-BF16-abliterated-v2-Q3_K_M.gguf
+  - model_name: Huihui-gpt-oss-20b
+    litellm_params:
+      model: llama_cpp/Huihui-gpt-oss-20b-BF16-abliterated-v2-Q3_K_M.gguf
+      # This tells llama.cpp to offload all possible layers to the GPU
+      n_gpu_layers: -1
 
-#   - model_name: openbuddy-gemma-7b
-#     litellm_params:
-#       model: llama_cpp/openbuddy-gemma-7b-v19.1-4k.i1-Q4_K_M.gguf
+  - model_name: openbuddy-gemma-7b
+    litellm_params:
+      model: llama_cpp/openbuddy-gemma-7b-v19.1-4k.i1-Q4_K_M.gguf
+      n_gpu_layers: -1
 
-#   - model_name: qwen2-7b-instruct
-#     litellm_params:
-#       model: llama_cpp/qwen2-7b-instruct-q4_k_m.gguf
+  - model_name: qwen2-7b-instruct
+    litellm_params:
+      model: llama_cpp/qwen2-7b-instruct-q4_k_m.gguf
+      n_gpu_layers: -1
 
   - model_name: zai-org-GLM-4.6
     litellm_params:
       model: llama_cpp/zai-org_GLM-4.6-imatrix.gguf
+      n_gpu_layers: -1
 
-# These are the general settings for the LiteLLM server.
 server_settings:
   host: 0.0.0.0
   port: 4000
