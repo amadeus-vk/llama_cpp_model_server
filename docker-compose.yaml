@@ -1,26 +1,21 @@
-version: '4.3'
-
-services:
- 
-  llamacpp-server:
-    # This service will be built using 'llamacpp.Dockerfile'
+version: '4.4'
+llamacpp-server:
     build:
       context: .
       dockerfile: llamacpp.Dockerfile
-
-    # The 'image' tag gives the locally built image a name
-    image: llama-cpp-model-server
+    image: llamacpp-server-final # Give it a new name
     container_name: nollama
     restart: unless-stopped
-    volumes:
-      - /media/data/gguf-models:/models:ro
     ports:
       - "4000:4000"
+    volumes:
+      - /media/data/gguf_models:/models:ro
     devices:
       - /dev/dri:/dev/dri
-    networks:
-      - agent_network
-   
-networks:
-  agent_network:
-    external: true
+    environment:
+      - MODEL=/models/qwen2-7b-instruct-q4_k_m.gguf # Which model to load
+      - N_GPU_LAYERS=-1                              # Offload all layers to GPU
+      - PORT=4000                                    # Port inside the container
+      - HOST=0.0.0.0                                 # Host inside the container
+    command: >
+      sh -c "python3 -m llama_cpp.server"
