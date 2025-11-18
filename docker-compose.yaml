@@ -18,4 +18,9 @@ llamacpp-server:
       - PORT=4000                                    # Port inside the container
       - HOST=0.0.0.0                                 # Host inside the container
     command: >
-      sh -c "python3 -m llama_cpp.server"
+      python3 -m llama_cpp.server
+      --model $MODEL
+      --n_gpu_layers $N_GPU_LAYERS
+      --host $HOST
+      --port $PORT
+      
