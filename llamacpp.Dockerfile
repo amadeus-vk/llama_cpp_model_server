@@ -2,16 +2,21 @@
 # version="1.10"
 FROM debian:bookworm
 
-# Set DEBIAN_FRONTEND to noninteractive
+# Set DEBIAN_FRONTEND to noninteractive to avoid prompts
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install prerequisite packages
+# 1. Install Python (The missing piece)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 \
+    python3-pip \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# 2. Install Build Tools and Wget
 RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
     build-essential \
     cmake \
-    python3 \
-    python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
 # Set up the working directory and install the Vulkan SDK
@@ -20,13 +25,17 @@ RUN wget https://sdk.lunarg.com/sdk/download/1.3.283.0/linux/vulkan-sdk-1.3.283.
     tar -xJf vulkan-sdk.tar.gz && \
     rm vulkan-sdk.tar.gz
 
-# --- Compile and Install llama-cpp-python ---
+# --- Compile llama-cpp-python ---
+# Copy the requirements file
+COPY llamacpp_requirements.txt .
+
+# Install the necessary libraries and compile llama-cpp-python with Vulkan flags
 RUN VULKAN_SDK_PATH=$(find /app -name "vulkansdk*" -type d) && \
     CMAKE_ARGS="-DLLAMA_VULKAN=on -DVulkan_INCLUDE_DIRS=$VULKAN_SDK_PATH/include -DVulkan_LIBRARIES=$VULKAN_SDK_PATH/lib/libvulkan.so" \
     pip3 install \
         --no-cache-dir \
         --break-system-packages \
-        "llama-cpp-python[server]" # Install with 'server' extras
+        -r llamacpp_requirements.txt
 
 # --- Set Final Environment for Runtime ---
 ENV VULKAN_SDK_PATH /app/vulkansdk*
@@ -34,5 +43,6 @@ ENV PATH $VULKAN_SDK_PATH/bin:$PATH
 ENV LD_LIBRARY_PATH $VULKAN_SDK_PATH/lib:$LD_LIBRARY_PATH
 ENV VK_LAYER_PATH $VULKAN_SDK_PATH/etc/vulkan/explicit_layer.d
 
-# Expose the port the server will run on
+# Expose the port and run the server
 EXPOSE 4000
+CMD ["/usr/bin/python3", "-m", "llama_cpp.server"]
