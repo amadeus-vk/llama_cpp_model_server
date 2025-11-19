@@ -6,9 +6,7 @@ FROM debian:bookworm
 ENV DEBIAN_FRONTEND=noninteractive
 
 # 1. Install dependencies
-RUN apt-get update; \
-    apt-get -o Acquire::AllowInsecureRepositories=true install --reinstall -y --no-install-recommends debian-archive-keyring; \
-    apt-get update && \
+RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     python3 \
     python3-pip \
@@ -24,7 +22,7 @@ RUN apt-get update; \
 WORKDIR /app
 RUN wget https://sdk.lunarg.com/sdk/download/1.3.283.0/linux/vulkan-sdk-1.3.283.0-x86_64.tar.gz -O vulkan-sdk.tar.gz
 RUN file vulkan-sdk.tar.gz
-RUN tar -xzf vulkan-sdk.tar.gz
+RUN tar -xJf vulkan-sdk.tar.gz
 RUN rm vulkan-sdk.tar.gz
 
 # --- Compile llama-cpp-python ---
