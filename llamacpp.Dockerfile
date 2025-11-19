@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     cmake \
     apt-utils \
+    file \
     && rm -rf /var/lib/apt/lists/*
 
 # Set up the working directory and install the Vulkan SDK
