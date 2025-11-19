@@ -5,7 +5,7 @@ FROM debian:bookworm
 # Set DEBIAN_FRONTEND to noninteractive to avoid prompts
 ENV DEBIAN_FRONTEND=noninteractive
 
-# 1. Install dependencies
+# 1. Install dependencies including Vulkan runtime
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     python3 \
@@ -14,7 +14,9 @@ RUN apt-get update && \
     build-essential \
     cmake \
     apt-utils \
-    file && \
+    file \
+    mesa-vulkan-drivers \
+    vulkan-tools && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -30,7 +32,7 @@ RUN rm vulkan-sdk.tar.gz
 COPY llamacpp_requirements.txt .
 
 # Install the necessary libraries and compile llama-cpp-python with Vulkan flags
-RUN VULKAN_SDK_PATH=/app/1.3.283.0 && \
+RUN VULKAN_SDK_PATH=/app/1.3.283.0/x86_64 && \
     CMAKE_ARGS="-DLLAMA_VULKAN=on -DVulkan_INCLUDE_DIRS=$VULKAN_SDK_PATH/include -DVulkan_LIBRARIES=$VULKAN_SDK_PATH/lib/libvulkan.so" \
     pip3 install \
         --no-cache-dir \
@@ -38,7 +40,7 @@ RUN VULKAN_SDK_PATH=/app/1.3.283.0 && \
         -r llamacpp_requirements.txt
 
 # --- Set Final Environment for Runtime ---
-ENV VULKAN_SDK_PATH /app/1.3.283.0
+ENV VULKAN_SDK_PATH /app/1.3.283.0/x86_64
 ENV PATH $VULKAN_SDK_PATH/bin:$PATH
 ENV LD_LIBRARY_PATH $VULKAN_SDK_PATH/lib:$LD_LIBRARY_PATH
 ENV VK_LAYER_PATH $VULKAN_SDK_PATH/etc/vulkan/explicit_layer.d
