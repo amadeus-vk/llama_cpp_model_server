@@ -44,7 +44,7 @@ services:
       - "--model"
       - "${MODEL}"
       - "--n_gpu_layers"
-      - "${N_GPU_LAYERS}"
+      - "999"
       - "--host"
       - "${HOST}"
       - "--port"
