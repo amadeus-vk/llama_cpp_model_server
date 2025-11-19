@@ -6,8 +6,8 @@ FROM debian:bookworm
 ENV DEBIAN_FRONTEND=noninteractive
 
 # 1. Install dependencies
-# RUN apt-get update; \
-RUN apt-get install -y --no-install-recommends debian-archive-keyring; \
+RUN apt-get update; \
+    apt-get install -y --no-install-recommends debian-archive-keyring; \
     apt-get update && \
     apt-get install -y --no-install-recommends \
     python3 \
