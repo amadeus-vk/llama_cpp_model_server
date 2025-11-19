@@ -33,10 +33,11 @@ COPY llamacpp_requirements.txt .
 
 # Install the necessary libraries and compile llama-cpp-python with Vulkan flags
 RUN VULKAN_SDK_PATH=/app/1.3.283.0/x86_64 && \
-    CMAKE_ARGS="-DLLAMA_VULKAN=on -DVulkan_INCLUDE_DIRS=$VULKAN_SDK_PATH/include -DVulkan_LIBRARIES=$VULKAN_SDK_PATH/lib/libvulkan.so" \
+    CMAKE_ARGS="-DGGML_VULKAN=ON -DVulkan_INCLUDE_DIRS=$VULKAN_SDK_PATH/include -DVulkan_LIBRARIES=$VULKAN_SDK_PATH/lib/libvulkan.so" \
     pip3 install \
         --no-cache-dir \
         --break-system-packages \
+        --verbose \
         -r llamacpp_requirements.txt
 
 # --- Set Final Environment for Runtime ---
