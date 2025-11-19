@@ -28,16 +28,31 @@ services:
     ports:
       - "4000:8080"
       
+    environment:
+      # Llama.cpp Command Arguments
+      - MODEL=/models/Phi-3-mini-4k-instruct-q4.gguf
+      - N_GPU_LAYERS=999
+      - PORT=8080
+      - HOST=0.0.0.0
+      
+      # ⬇️ VULKAN RUNTIME ENVIRONMENT VARIABLES ⬇️
+      # These variables must match the paths from your Dockerfile's compilation phase
+      - VULKAN_SDK_PATH=/app/vulkansdk*
+      - LD_LIBRARY_PATH=$VULKAN_SDK_PATH/lib:$LD_LIBRARY_PATH
+      - VK_LAYER_PATH=$VULKAN_SDK_PATH/etc/vulkan/explicit_layer.d
+      
+    command: [
+      "sh", 
+      "-c",
+      # ... (your command remains the same)
+      "/usr/bin/python3.11 -m llama_cpp.server --model $MODEL --n_gpu_layers $N_GPU_LAYERS --host $HOST --port $PORT"
+    ]    
     # The Dockerfile sets the final WORKDIR, but being explicit is good.
     # working_dir: /app/llama.cpp/build/bin
     
     # This is the command that runs inside the container
     # It uses the specific model and settings from your script
-    command: [
-      "sh", 
-      "-c",
-      "python3 -m llama_cpp.server --model /models/Phi-3-mini-4k-instruct-q4.gguf --n_gpu_layers 999 --host 0.0.0.0 --port 8080"
-    ]
+    
     networks:
       - agent_network
       - certifiied-proxy_proxy-network
