@@ -13,13 +13,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # 2. Install Build Tools and Wget
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends \
     wget \
     build-essential \
     cmake \
     apt-utils \
-    file \
-    && rm -rf /var/lib/apt/lists/*
+    file
 
 # Set up the working directory and install the Vulkan SDK
 WORKDIR /app
