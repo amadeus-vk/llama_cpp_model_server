@@ -22,9 +22,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Set up the working directory and install the Vulkan SDK
 WORKDIR /app
-RUN wget https://sdk.lunarg.com/sdk/download/1.3.283.0/linux/vulkan-sdk-1.3.283.0-x86_64.tar.gz -O vulkan-sdk.tar.gz && \
-    tar -xzf vulkan-sdk.tar.gz && \
-    rm vulkan-sdk.tar.gz
+RUN wget https://sdk.lunarg.com/sdk/download/1.3.283.0/linux/vulkan-sdk-1.3.283.0-x86_64.tar.gz -O vulkan-sdk.tar.gz
+RUN tar -xzf vulkan-sdk.tar.gz
+RUN rm vulkan-sdk.tar.gz
 
 # --- Compile llama-cpp-python ---
 # Copy the requirements file
