@@ -5,21 +5,20 @@ FROM debian:bookworm
 # Set DEBIAN_FRONTEND to noninteractive to avoid prompts
 ENV DEBIAN_FRONTEND=noninteractive
 
-# 1. Install Python (The missing piece)
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# 1. Install dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends debian-archive-keyring && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
     python3 \
     python3-pip \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# 2. Install Build Tools and Wget
-RUN apt-get clean && apt-get update
-RUN apt-get install -y --no-install-recommends \
     wget \
     build-essential \
     cmake \
     apt-utils \
-    file
+    file && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set up the working directory and install the Vulkan SDK
 WORKDIR /app
