@@ -29,17 +29,13 @@ services:
       - "4000:8080"
       
     environment:
-      # Llama.cpp Command Arguments
-      - MODEL=/models/Phi-3-mini-4k-instruct-q4.gguf
-      - N_GPU_LAYERS=999
-      - PORT=8080
-      - HOST=0.0.0.0
-      
-      # ⬇️ VULKAN RUNTIME ENVIRONMENT VARIABLES ⬇️
-      # These variables must match the paths from your Dockerfile's compilation phase
-      - VULKAN_SDK_PATH=/app/vulkansdk*
-      - LD_LIBRARY_PATH=$VULKAN_SDK_PATH/lib:$LD_LIBRARY_PATH
-      - VK_LAYER_PATH=$VULKAN_SDK_PATH/etc/vulkan/explicit_layer.d
+      MODEL: "/models/Phi-3-mini-4k-instruct-q4.gguf"
+      N_GPU_LAYERS: 999
+      PORT: 8080
+      HOST: "0.0.0.0"
+      VULKAN_SDK_PATH: "/app/vulkansdk*"
+      LD_LIBRARY_PATH: "$VULKAN_SDK_PATH/lib:$LD_LIBRARY_PATH"
+      VK_LAYER_PATH: "$VULKAN_SDK_PATH/etc/vulkan/explicit_layer.d"
       
     command:
       - "/usr/bin/python3.11"
