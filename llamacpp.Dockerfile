@@ -5,7 +5,7 @@ FROM debian:bookworm
 # Set DEBIAN_FRONTEND to noninteractive to avoid prompts
 ENV DEBIAN_FRONTEND=noninteractive
 
-# 1. Install dependencies including Vulkan runtime
+# 1. Install dependencies including Vulkan runtime and development tools
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     python3 \
@@ -16,7 +16,9 @@ RUN apt-get update && \
     apt-utils \
     file \
     mesa-vulkan-drivers \
-    vulkan-tools && \
+    vulkan-tools \
+    glslang-tools \
+    libvulkan-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
