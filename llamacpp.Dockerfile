@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # 1. Install dependencies
 RUN apt-get update; \
-    apt-get install --reinstall -y --no-install-recommends debian-archive-keyring; \
+    apt-get -o Acquire::AllowInsecureRepositories=true install --reinstall -y --no-install-recommends debian-archive-keyring; \
     apt-get update && \
     apt-get install -y --no-install-recommends \
     python3 \
