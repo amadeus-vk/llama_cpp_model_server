@@ -41,12 +41,18 @@ services:
       - LD_LIBRARY_PATH=$VULKAN_SDK_PATH/lib:$LD_LIBRARY_PATH
       - VK_LAYER_PATH=$VULKAN_SDK_PATH/etc/vulkan/explicit_layer.d
       
-    command: [
-      "sh", 
-      "-c",
-      # ... (your command remains the same)
-      "/usr/bin/python3.11 -m llama_cpp.server --model $MODEL --n_gpu_layers $N_GPU_LAYERS --host $HOST --port $PORT"
-    ]    
+    command:
+      - "/usr/bin/python3.11"
+      - "-m"
+      - "llama_cpp.server"
+      - "--model"
+      - "${MODEL}"
+      - "--n_gpu_layers"
+      - "${N_GPU_LAYERS}"
+      - "--host"
+      - "${HOST}"
+      - "--port"
+      - "${PORT}"
     # The Dockerfile sets the final WORKDIR, but being explicit is good.
     # working_dir: /app/llama.cpp/build/bin
     
