@@ -34,9 +34,10 @@ RUN rm vulkan-sdk.tar.gz
 COPY llamacpp_requirements.txt .
 
 # Install the necessary libraries and compile llama-cpp-python with Vulkan flags
+# Disable cooperative matrix due to Vulkan SDK version compatibility
 RUN VULKAN_SDK_PATH=/app/1.3.283.0/x86_64 && \
     export PATH=$VULKAN_SDK_PATH/bin:$PATH && \
-    CMAKE_ARGS="-DGGML_VULKAN=ON -DVulkan_INCLUDE_DIRS=$VULKAN_SDK_PATH/include -DVulkan_LIBRARIES=$VULKAN_SDK_PATH/lib/libvulkan.so -DVulkan_GLSLC_EXECUTABLE=$VULKAN_SDK_PATH/bin/glslc" \
+    CMAKE_ARGS="-DGGML_VULKAN=ON -DGGML_VULKAN_DISABLE_COOPMAT2=ON -DVulkan_INCLUDE_DIRS=$VULKAN_SDK_PATH/include -DVulkan_LIBRARIES=$VULKAN_SDK_PATH/lib/libvulkan.so -DVulkan_GLSLC_EXECUTABLE=$VULKAN_SDK_PATH/bin/glslc" \
     pip3 install \
         --no-cache-dir \
         --break-system-packages \
