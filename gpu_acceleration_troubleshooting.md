@@ -73,7 +73,26 @@ This document tracks the steps taken to diagnose and resolve issues with GPU acc
 
 ---
 
+**Current Status (2025-11-19):**
+
+### Step 5: Vulkan Compilation Issues
+
+*   **Status:** **`BLOCKED`**
+*   **Issue:** llama-cpp-python (v0.3.16) Vulkan backend compilation fails due to cooperative matrix feature incompatibility
+*   **Error:** `VkPhysicalDeviceCooperativeMatrixFeaturesKHR` not declared - expects NV variant instead
+*   **Root Cause:** Vulkan SDK 1.3.283 and system Vulkan 1.3.239 headers don't include KHR cooperative matrix extensions
+*   **Attempted Fixes:**
+    *   Added mesa-vulkan-drivers, vulkan-tools, glslang-tools, libvulkan-dev
+    *   Configured CMAKE with proper Vulkan paths and glslc executable
+    *   Attempted to disable cooperative matrix with `-DGGML_VULKAN_DISABLE_COOPMAT2=ON` (did not work)
+
+**Alternative Approaches:**
+1.  Try CLBlast backend instead of Vulkan (OpenCL-based, may work with AMD)
+2.  Use older llama-cpp-python version that doesn't require cooperative matrix
+3.  Upgrade to newer Vulkan SDK with KHR cooperative matrix support
+4.  Use ROCm backend if available (AMD-specific, requires ROCm installation)
+
 **Next Steps:**
-1.  Follow the instructions in **Step 3** to rebuild `llama-cpp-python`.
-2.  Proceed to **Step 4** to run the server with the correct arguments.
-3.  Carefully examine the new logs to confirm that the GPU is being utilized.
+1.  Test CLBlast backend as it's more compatible with older systems
+2.  If CLBlast works, document and deploy
+3.  Otherwise, consider ROCm or older llama-cpp-python version
