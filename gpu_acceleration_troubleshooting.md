@@ -90,9 +90,8 @@ This document tracks the steps taken to diagnose and resolve issues with GPU acc
 1.  Try CLBlast backend instead of Vulkan (OpenCL-based, may work with AMD)
 2.  Use older llama-cpp-python version that doesn't require cooperative matrix
 3.  Upgrade to newer Vulkan SDK with KHR cooperative matrix support
-4.  Use ROCm backend if available (AMD-specific, requires ROCm installation)
 
 **Next Steps:**
 1.  Test CLBlast backend as it's more compatible with older systems
 2.  If CLBlast works, document and deploy
-3.  Otherwise, consider ROCm or older llama-cpp-python version
+3.  Otherwise, consider older llama-cpp-python version or newer Vulkan SDK
