@@ -5,40 +5,47 @@ FROM debian:bookworm
 # Set DEBIAN_FRONTEND to noninteractive to avoid prompts
 ENV DEBIAN_FRONTEND=noninteractive
 
-# 1. Install Python (The missing piece)
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# 1. Install dependencies including Vulkan runtime and development tools
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
     python3 \
     python3-pip \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# 2. Install Build Tools and Wget
-RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
     build-essential \
     cmake \
-    && rm -rf /var/lib/apt/lists/*
+    apt-utils \
+    file \
+    mesa-vulkan-drivers \
+    vulkan-tools \
+    glslang-tools \
+    libvulkan-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set up the working directory and install the Vulkan SDK
 WORKDIR /app
-RUN wget https://sdk.lunarg.com/sdk/download/1.3.283.0/linux/vulkan-sdk-1.3.283.0-x86_64.tar.gz -O vulkan-sdk.tar.gz && \
-    tar -xJf vulkan-sdk.tar.gz && \
-    rm vulkan-sdk.tar.gz
+RUN wget https://sdk.lunarg.com/sdk/download/1.3.283.0/linux/vulkan-sdk-1.3.283.0-x86_64.tar.gz -O vulkan-sdk.tar.gz
+RUN file vulkan-sdk.tar.gz
+RUN tar -xJf vulkan-sdk.tar.gz
+RUN rm vulkan-sdk.tar.gz
 
 # --- Compile llama-cpp-python ---
 # Copy the requirements file
 COPY llamacpp_requirements.txt .
 
 # Install the necessary libraries and compile llama-cpp-python with Vulkan flags
-RUN VULKAN_SDK_PATH=$(find /app -name "vulkansdk*" -type d) && \
-    CMAKE_ARGS="-DLLAMA_VULKAN=on -DVulkan_INCLUDE_DIRS=$VULKAN_SDK_PATH/include -DVulkan_LIBRARIES=$VULKAN_SDK_PATH/lib/libvulkan.so" \
+# Disable cooperative matrix due to Vulkan SDK version compatibility
+RUN VULKAN_SDK_PATH=/app/1.3.283.0/x86_64 && \
+    export PATH=$VULKAN_SDK_PATH/bin:$PATH && \
+    CMAKE_ARGS="-DGGML_VULKAN=ON -DGGML_VULKAN_DISABLE_COOPMAT2=ON -DVulkan_INCLUDE_DIRS=$VULKAN_SDK_PATH/include -DVulkan_LIBRARIES=$VULKAN_SDK_PATH/lib/libvulkan.so -DVulkan_GLSLC_EXECUTABLE=$VULKAN_SDK_PATH/bin/glslc" \
     pip3 install \
         --no-cache-dir \
         --break-system-packages \
+        --verbose \
         -r llamacpp_requirements.txt
 
 # --- Set Final Environment for Runtime ---
-ENV VULKAN_SDK_PATH /app/vulkansdk*
+ENV VULKAN_SDK_PATH /app/1.3.283.0/x86_64
 ENV PATH $VULKAN_SDK_PATH/bin:$PATH
 ENV LD_LIBRARY_PATH $VULKAN_SDK_PATH/lib:$LD_LIBRARY_PATH
 ENV VK_LAYER_PATH $VULKAN_SDK_PATH/etc/vulkan/explicit_layer.d
