@@ -1,5 +1,5 @@
 # Start from a clean Debian base image
-# version="2.0"
+# version="2.1"
 FROM debian:bookworm
 
 # Set DEBIAN_FRONTEND to noninteractive to avoid prompts
